@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:03:45 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/28 11:09:33 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:30:50 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,24 @@ char	*ft_strchr(const char *s, int c)
 	if (ch == '\0')
 		return ((char *)&s[i]);
 	return (NULL);
+}
+
+char	*ft_strdup(const char *s)
+{
+	size_t	len;
+	char	*dup;
+	size_t	i;
+
+	len = ft_strlen(s);
+	dup = (char *)malloc(sizeof(char) * (len + 1));
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	dup[len] = '\0';
+	return (dup);
 }
