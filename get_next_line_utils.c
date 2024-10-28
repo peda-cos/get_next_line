@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:03:45 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/28 10:08:08 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:13:29 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,22 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_memcpy(joined + len1, s2, len2);
 	joined[len1 + len2] = '\0';
 	return (joined);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	char	ch;
+	int		i;
+
+	ch = (char)c;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == ch)
+			return ((char *)&s[i]);
+		i++;
+	}
+	if (ch == '\0')
+		return ((char *)&s[i]);
+	return (NULL);
 }
