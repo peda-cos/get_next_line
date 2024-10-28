@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:11:09 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/28 11:27:11 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:33:37 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,23 @@ static char	*read_line(int fd, char *buffer, char *line, char **remainder)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1];
+	static char	*remainder;
 	char		*line;
+	char		buffer[BUFFER_SIZE + 1];
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = NULL;
-	line = read_line(fd, buffer, line);
-	if (!line || (line[0] == '\0' && buffer[0] == '\0'))
+	line = ft_strdup("");
+	if (remainder)
+	{
+		line = ft_strjoin(line, remainder);
+		free(remainder);
+		remainder = NULL;
+		if (ft_strchr(line, '\n'))
+			return (extract_line(&line, &remainder));
+	}
+	line = read_line(fd, buffer, line, &remainder);
+	if (!line || (line[0] == '\0' && remainder == NULL))
 	{
 		free(line);
 		return (NULL);
