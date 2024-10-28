@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:11:09 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/28 10:59:58 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:02:04 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ static char	*read_line(int fd, char *buffer, char *line)
 		buffer[bytes_read] = '\0';
 		temp = line;
 		line = ft_strjoin(line, buffer);
-		free(temp) if (!line) return (NULL);
+		free(temp);
+		if (!line)
+			return (NULL);
 		if (ft_strchr(line, '\n'))
 			break ;
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
