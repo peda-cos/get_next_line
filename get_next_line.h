@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:52:36 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/29 15:30:46 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:46:46 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # endif
 
 # include <stdlib.h>
-# include <unistd.h>
 
 char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
