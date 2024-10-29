@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:03:45 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/28 11:48:19 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/29 02:44:36 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,86 +24,73 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-char	*ft_strchr(const char *s, int c)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	char	ch;
-	size_t	i;
+	size_t			i;
+	unsigned char	*ptr;
 
-	ch = (char)c;
+	ptr = (unsigned char *)s;
 	i = 0;
-	if (!s)
-		return (NULL);
-	while (s[i])
+	while (i < n)
 	{
-		if (s[i] == ch)
-			return ((char *)&s[i]);
+		ptr[i] = (unsigned char)c;
 		i++;
 	}
-	if (ch == '\0')
-		return ((char *)&s[i]);
-	return (NULL);
+	return (s);
+}
+
+void	*ft_memmove(void *dest, const void *src, size_t n)
+{
+	unsigned char		*d;
+	const unsigned char	*s;
+
+	d = (unsigned char *)dest;
+	s = (const unsigned char *)src;
+	if (s < d)
+	{
+		while (n--)
+			d[n] = s[n];
+	}
+	else
+	{
+		while (n--)
+			*d++ = *s++;
+	}
+	return (dest);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	size_t	total_size;
+	void	*ptr;
+
+	if (nmemb == 0 || size == 0)
+		return (malloc(0));
+	if (nmemb > (size_t)-1 / size)
+		return (NULL);
+	total_size = nmemb * size;
+	ptr = malloc(total_size);
+	if (!ptr)
+		return (NULL);
+	ft_memset(ptr, 0, total_size);
+	return (ptr);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	len1;
 	size_t	len2;
-	size_t	i;
 	char	*joined;
 
-	if (!s1 && !s2)
+	if (!s1 || !s2)
 		return (NULL);
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
-	joined = (char *)malloc(len1 + len2 + 1);
+	joined = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
 	if (!joined)
 		return (NULL);
-	i = -1;
-	while (++i < len1)
-		joined[i] = s1[i];
-	i = -1;
-	while (++i < len2)
-		joined[len1 + i] = s2[i];
+	ft_memmove(joined, s1, len1);
+	ft_memmove(joined + len1, s2, len2);
 	joined[len1 + len2] = '\0';
 	return (joined);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	size_t	len;
-	size_t	i;
-	char	*dup;
-
-	len = ft_strlen(s1);
-	dup = (char *)malloc(len + 1);
-	if (!dup)
-		return (NULL);
-	i = -1;
-	while (++i < len)
-		dup[i] = s1[i];
-	dup[len] = '\0';
-	return (dup);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	size_t	s_len;
-	size_t	i;
-	char	*substr;
-
-	if (!s)
-		return (NULL);
-	s_len = ft_strlen(s);
-	if (start >= s_len)
-		return (ft_strdup(""));
-	if (len > s_len - start)
-		len = s_len - start;
-	substr = (char *)malloc(len + 1);
-	if (!substr)
-		return (NULL);
-	i = -1;
-	while (++i < len)
-		substr[i] = s[start + i];
-	substr[len] = '\0';
-	return (substr);
 }

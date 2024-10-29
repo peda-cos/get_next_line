@@ -6,78 +6,41 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:11:09 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/28 11:47:38 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/29 02:50:25 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*extract_line(char **line, char **remainder)
+static char	*ft_read_line_fd(char *line, char **buffers, int fd)
 {
-	char	*newline_pos;
-	char	*temp;
-	size_t	len;
+	int	buffer_len;
 
-	newline_pos = ft_strchr(*line, '\n');
-	if (newline_pos)
+	while (1)
 	{
-		len = newline_pos - *line + 1;
-		temp = ft_substr(*line, 0, len);
-		*remainder = ft_strdup(newline_pos + 1);
-		free(*line);
-		*line = NULL;
-		return (temp);
+		buffer_len = ft_load_line_from_buffer(&line, buffers);
+		if (buffer_len < 0)
+			return (line);
+		if (buffer_len > 0)
+			line = ft_strjoin(line, buffers[0]);
+		ft_memset(buffers[0], 0, BUFFER_SIZE);
+		if (read(fd, buffers[0], BUFFER_SIZE) < 1)
+			return (ft_clear_buffer(line, buffers));
 	}
-	return (*line);
-}
-
-static char	*read_line(int fd, char *buffer, char *line, char **remainder)
-{
-	int		bytes_read;
-	char	*temp;
-
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	while (bytes_read > 0)
-	{
-		buffer[bytes_read] = '\0';
-		temp = ft_strjoin(line, buffer);
-		free(line);
-		if (!temp)
-			return (NULL);
-		line = temp;
-		if (ft_strchr(buffer, '\n'))
-			break ;
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-	}
-	if (bytes_read < 0)
-	{
-		free(line);
-		return (NULL);
-	}
-	return (line);
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*remainder;
-	char		*line;
-	char		buffer[BUFFER_SIZE + 1];
+	static char	*buffers[FT_GNL_MAX];
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if ((fd < 0) || (BUFFER_SIZE < 1))
 		return (NULL);
-	line = ft_strdup("");
-	if (!line)
+	if (read(fd, NULL, 0) < 0)
+		return (ft_clear_buffer(NULL, buffers + fd * (FT_GNL_MAX > 1)));
+	if (buffers[fd * (FT_GNL_MAX > 1)] == NULL)
+		buffers[fd * (FT_GNL_MAX > 1)] = ft_calloc(BUFFER_SIZE, sizeof(char));
+	if (buffers[fd * (FT_GNL_MAX > 1)] == NULL)
 		return (NULL);
-	if (remainder)
-	{
-		line = ft_strjoin(line, remainder);
-		free(remainder);
-		remainder = NULL;
-		if (ft_strchr(line, '\n'))
-			return (extract_line(&line, &remainder));
-	}
-	line = read_line(fd, buffer, line, &remainder);
-	if (!line)
-		return (NULL);
-	return (extract_line(&line, &remainder));
+	return (ft_read_line_fd(NULL, buffers + fd * (FT_GNL_MAX > 1), fd));
 }

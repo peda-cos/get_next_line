@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:04:45 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/28 11:48:54 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/29 02:53:32 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+# define BUFFER_SIZE 1
+
 char	*get_next_line(int fd);
 
-size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strdup(const char *s1);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+size_t  ft_strlen(const char *s);
+void    *ft_memset(void *s, int c, size_t n);
+void    *ft_memmove(void *dest, const void *src, size_t n);
+void    *ft_calloc(size_t nmemb, size_t size);
+char    *ft_strjoin(char const *s1, char const *s2);
 
 #endif
