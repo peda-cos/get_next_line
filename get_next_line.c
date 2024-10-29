@@ -6,40 +6,57 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/29 10:53:40 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:59:40 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*get_next_line(int fd)
+static char	*ft_read_until_newline(int fd, char *buffer)
 {
-	static char	*remainder;
-	char		buffer[BUFFER_SIZE + 1];
-	char		*line;
-	ssize_t		bytes_read;
-	char		*temp;
+	char	*temp_buffer;
+	ssize_t	bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	temp_buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!temp_buffer)
 		return (NULL);
 	bytes_read = 1;
-	while (!ft_strchr_gnl(remainder, '\n') && bytes_read != 0)
+	while (!ft_find_char(buffer, '\n') && bytes_read != 0)
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		bytes_read = read(fd, temp_buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
 		{
-			free(remainder);
-			remainder = NULL;
+			free(temp_buffer);
+			free(buffer);
 			return (NULL);
 		}
-		buffer[bytes_read] = '\0';
-		remainder = ft_strjoin_gnl(remainder, buffer);
+		temp_buffer[bytes_read] = '\0';
+		buffer = ft_str_join(buffer, temp_buffer);
+		if (!buffer)
+		{
+			free(temp_buffer);
+			return (NULL);
+		}
 	}
-	if (!remainder)
+	free(temp_buffer);
+	return (buffer);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*buffer;
+	char		*line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		free(buffer);
+		buffer = NULL;
 		return (NULL);
-	line = ft_strdup_gnl(remainder);
-	temp = remainder;
-	remainder = ft_strdup_gnl(ft_strchr_gnl(remainder, '\n') + 1);
-	free(temp);
+	}
+	buffer = ft_read_until_newline(fd, buffer);
+	if (!buffer)
+		return (NULL);
+	line = ft_extract_line(buffer);
+	buffer = ft_update_buffer(buffer);
 	return (line);
 }
