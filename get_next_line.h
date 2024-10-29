@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:52:36 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/29 10:52:46 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:16:46 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
-char	*ft_strchr_gnl(const char *s, int c);
-size_t	ft_strlen_gnl(const char *s);
-char	*ft_strjoin_gnl(char *s1, char *s2);
-char	*ft_strdup_gnl(const char *s1);
+char	*ft_str_join(char *s1, char *s2);
+char	*ft_extract_line(char *buffer);
+char	*ft_update_buffer(char *buffer);
+size_t	ft_string_length(const char *s);
+char	*ft_find_char(const char *s, int c);
 
 #endif
