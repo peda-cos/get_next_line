@@ -6,38 +6,41 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/29 10:53:41 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:29:41 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen_gnl(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
 	len = 0;
-	while (s && s[len])
+	while (s[len])
 		len++;
 	return (len);
 }
 
-char	*ft_strchr_gnl(const char *s, int c)
+char	*ft_strchr(const char *s, int c)
 {
-	if (!s)
-		return (NULL);
-	while (*s)
+	char	ch;
+	int		i;
+
+	ch = (char)c;
+	i = 0;
+	while (s[i])
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
+		if (s[i] == ch)
+			return ((char *)&s[i]);
+		i++;
 	}
-	if (c == '\0')
-		return ((char *)s);
+	if (ch == '\0')
+		return ((char *)&s[i]);
 	return (NULL);
 }
 
-char	*ft_strjoin_gnl(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
 	size_t	j;
@@ -45,7 +48,7 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 
 	if (!s1 && !s2)
 		return (NULL);
-	joined = malloc(ft_strlen_gnl(s1) + ft_strlen_gnl(s2) + 1);
+	joined = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!joined)
 		return (NULL);
 	i = 0;
@@ -56,28 +59,64 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 		i++;
 	}
 	while (s2[j])
+	{
 		joined[i++] = s2[j++];
+	}
 	joined[i] = '\0';
 	free(s1);
 	return (joined);
 }
 
-char	*ft_strdup_gnl(const char *s1)
+char	*ft_extract_line(char *buffer)
 {
+	char	*line;
 	size_t	i;
-	char	*dup;
 
-	if (!s1)
+	i = 0;
+	if (!buffer[i])
 		return (NULL);
-	dup = malloc(ft_strlen_gnl(s1) + 1);
-	if (!dup)
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	line = malloc((i + 2) * sizeof(char));
+	if (!line)
 		return (NULL);
 	i = 0;
-	while (s1[i])
+	while (buffer[i] && buffer[i] != '\n')
 	{
-		dup[i] = s1[i];
+		line[i] = buffer[i];
 		i++;
 	}
-	dup[i] = '\0';
-	return (dup);
+	if (buffer[i] == '\n')
+	{
+		line[i] = buffer[i];
+		i++;
+	}
+	line[i] = '\0';
+	return (line);
+}
+
+char	*ft_update_buffer(char *buffer)
+{
+	size_t	i;
+	size_t	j;
+	char	*new_buffer;
+
+	i = 0;
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	if (!buffer[i])
+	{
+		free(buffer);
+		return (NULL);
+	}
+	new_buffer = malloc((ft_strlen(buffer) - i) * sizeof(char));
+	if (!new_buffer)
+		return (NULL);
+	i++;
+	j = 0;
+	while (buffer[i])
+		new_buffer[j++] = buffer[i++];
+	new_buffer[j] = '\0';
+	free(buffer);
+	return (new_buffer);
 }
