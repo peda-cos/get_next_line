@@ -6,11 +6,12 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/29 15:29:40 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:45:40 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <unistd.h>
 
 static char	*ft_read_until_newline(int fd, char *buffer)
 {
