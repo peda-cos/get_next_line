@@ -6,7 +6,7 @@
 #    By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/29 10:54:58 by peda-cos          #+#    #+#              #
-#    Updated: 2024/10/29 10:55:53 by peda-cos         ###   ########.fr        #
+#    Updated: 2024/10/29 10:58:44 by peda-cos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,10 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(BUFFER) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(BUFFER) -o $(NAME) $(OBJS)
+
+%.o: %.c get_next_line.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)
