@@ -6,34 +6,12 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/30 01:37:34 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 01:50:01 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <unistd.h>
-
-static char	*ft_read_buffer(int fd, char *buffer);
-static char	*ft_update_buffer(char *buffer);
-
-char	*get_next_line(int fd)
-{
-	static char	*buffer;
-	char		*line;
-
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-	{
-		free(buffer);
-		buffer = NULL;
-		return (NULL);
-	}
-	buffer = ft_read_buffer(fd, buffer);
-	if (!buffer)
-		return (NULL);
-	line = ft_extract_line(buffer);
-	buffer = ft_update_buffer(buffer);
-	return (line);
-}
 
 static char	*ft_read_buffer(int fd, char *buffer)
 {
@@ -46,22 +24,27 @@ static char	*ft_read_buffer(int fd, char *buffer)
 	bytes_read = 1;
 	while ((!buffer || !ft_strchr(buffer, '\n')) && bytes_read != 0)
 	{
-		bytes_read = read(fd, temp_buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-		{
-			free(temp_buffer);
-			free(buffer);
-			return (NULL);
-		}
-		temp_buffer[bytes_read] = '\0';
-		buffer = ft_strjoin(buffer, temp_buffer);
+		buffer = ft_read_and_join(fd, buffer, temp_buffer);
 		if (!buffer)
-		{
-			free(temp_buffer);
-			return (NULL);
-		}
+			break ;
 	}
 	free(temp_buffer);
+	return (buffer);
+}
+
+static char	*ft_read_and_join(int fd, char *buffer, char *temp_buffer)
+{
+	ssize_t	bytes_read;
+
+	bytes_read = read(fd, temp_buffer, BUFFER_SIZE);
+	if (bytes_read == -1)
+	{
+		free(temp_buffer);
+		free(buffer);
+		return (NULL);
+	}
+	temp_buffer[bytes_read] = '\0';
+	buffer = ft_strjoin(buffer, temp_buffer);
 	return (buffer);
 }
 
@@ -91,4 +74,23 @@ static char	*ft_update_buffer(char *buffer)
 	new_buffer[j] = '\0';
 	free(buffer);
 	return (new_buffer);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*buffer;
+	char		*line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		free(buffer);
+		buffer = NULL;
+		return (NULL);
+	}
+	buffer = ft_read_buffer(fd, buffer);
+	if (!buffer)
+		return (NULL);
+	line = ft_extract_line(buffer);
+	buffer = ft_update_buffer(buffer);
+	return (line);
 }
