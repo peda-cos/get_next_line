@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/30 01:27:46 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 01:33:22 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,6 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-static char	*allocate_joined(char *s1, char *s2, size_t len1, size_t len2)
-{
-	char	*joined;
-
-	joined = malloc((len1 + len2 + 1) * sizeof(char));
-	if (!joined)
-		return (NULL);
-	return (joined);
-}
-
 char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	len1;
@@ -68,7 +58,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		len2 = ft_strlen(s2);
 	if (!s1 && !s2)
 		return (NULL);
-	joined = allocate_joined(s1, s2, len1, len2);
+	joined = malloc((len1 + len2 + 1) * sizeof(char));
 	if (!joined)
 		return (NULL);
 	i = 0;
