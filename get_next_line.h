@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:52:36 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/29 15:46:46 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 01:27:56 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_extract_line(char *buffer);
-char	*ft_update_buffer(char *buffer);
 size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
 

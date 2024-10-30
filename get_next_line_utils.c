@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/30 01:15:25 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 01:27:46 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *s)
 	size_t	len;
 
 	len = 0;
+	if (!s)
+		return (0);
 	while (s[len])
 		len++;
 	return (len);
@@ -40,6 +42,16 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+static char	*allocate_joined(char *s1, char *s2, size_t len1, size_t len2)
+{
+	char	*joined;
+
+	joined = malloc((len1 + len2 + 1) * sizeof(char));
+	if (!joined)
+		return (NULL);
+	return (joined);
+}
+
 char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	len1;
@@ -48,11 +60,15 @@ char	*ft_strjoin(char *s1, char *s2)
 	size_t	j;
 	char	*joined;
 
-	len1 = s1 ? ft_strlen(s1) : 0;
-	len2 = s2 ? ft_strlen(s2) : 0;
+	len1 = 0;
+	if (s1)
+		len1 = ft_strlen(s1);
+	len2 = 0;
+	if (s2)
+		len2 = ft_strlen(s2);
 	if (!s1 && !s2)
 		return (NULL);
-	joined = malloc((len1 + len2 + 1) * sizeof(char));
+	joined = allocate_joined(s1, s2, len1, len2);
 	if (!joined)
 		return (NULL);
 	i = 0;
@@ -93,30 +109,4 @@ char	*ft_extract_line(char *buffer)
 	}
 	line[i] = '\0';
 	return (line);
-}
-
-char	*ft_update_buffer(char *buffer)
-{
-	size_t	i;
-	size_t	j;
-	char	*new_buffer;
-
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	if (!buffer[i])
-	{
-		free(buffer);
-		return (NULL);
-	}
-	new_buffer = malloc((ft_strlen(buffer) - i + 1) * sizeof(char));
-	if (!new_buffer)
-		return (NULL);
-	i++;
-	j = 0;
-	while (buffer[i])
-		new_buffer[j++] = buffer[i++];
-	new_buffer[j] = '\0';
-	free(buffer);
-	return (new_buffer);
 }
