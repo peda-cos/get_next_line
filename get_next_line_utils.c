@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/30 02:49:44 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 03:18:49 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*ft_strchr(const char *str, int ch)
 		return ((char *)&str[ft_strlen(str)]);
 	while (str[i] != '\0')
 	{
-		if (str[i] == (char) ch)
+		if (str[i] == (char)ch)
 			return ((char *)&str[i]);
 		i++;
 	}
