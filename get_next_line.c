@@ -6,36 +6,65 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/30 02:54:02 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 03:10:04 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*update_alloc(char *alloc)
+static char	*read_to_buffer(int fd, char *buffer)
 {
-	int		i;
-	int		j;
-	char	*new_alloc;
+	char	*temp_buffer;
+	ssize_t	bytes_read;
+
+	temp_buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!temp_buffer)
+		return (NULL);
+	bytes_read = 1;
+	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
+	{
+		bytes_read = read(fd, temp_buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
+		{
+			free(temp_buffer);
+			return (NULL);
+		}
+		temp_buffer[bytes_read] = '\0';
+		buffer = ft_strjoin(buffer, temp_buffer);
+		if (!buffer)
+		{
+			free(temp_buffer);
+			return (NULL);
+		}
+	}
+	free(temp_buffer);
+	return (buffer);
+}
+
+static char	*update_buffer(char *buffer)
+{
+	size_t	i;
+	size_t	j;
+	char	*new_buffer;
 
 	i = 0;
-	while (alloc[i] && alloc[i] != '\n')
+	while (buffer[i] && buffer[i] != '\n')
 		i++;
-	if (!alloc[i])
+	if (!buffer[i])
 	{
-		free(alloc);
+		free(buffer);
 		return (NULL);
 	}
-	new_alloc = (char *)malloc(sizeof(char) * (ft_strlen(alloc) - i + 1));
-	if (!new_alloc)
+	new_buffer = malloc((ft_strlen(buffer) - i + 1) * sizeof(char));
+	if (!new_buffer)
 		return (NULL);
 	i++;
 	j = 0;
-	while (alloc[i])
-		new_alloc[j++] = alloc[i++];
-	new_alloc[j] = '\0';
-	free(alloc);
-	return (new_alloc);
+	while (buffer[i])
+		new_buffer[j++] = buffer[i++];
+	new_buffer[j] = '\0';
+	free(buffer);
+	return (new_buffer);
 }
 
 static char	*extract_line(char *alloc)
@@ -66,41 +95,17 @@ static char	*extract_line(char *alloc)
 	return (line);
 }
 
-static char	*read_and_alloc(int fd, char *alloc)
-{
-	ssize_t	read_bytes;
-	char	*buffer;
-
-	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buffer)
-		return (NULL);
-	read_bytes = 1;
-	while (!ft_strchr(alloc, '\n') && read_bytes != 0)
-	{
-		read_bytes = read(fd, buffer, BUFFER_SIZE);
-		if (read_bytes == -1)
-		{
-			free(buffer);
-			return (NULL);
-		}
-		buffer[read_bytes] = '\0';
-		alloc = ft_strjoin(alloc, buffer);
-	}
-	free(buffer);
-	return (alloc);
-}
-
 char	*get_next_line(int fd)
 {
+	static char	*buffer = NULL;
 	char		*line;
-	static char	*alloc;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) == -1)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	alloc = read_and_alloc(fd, alloc);
-	if (!alloc)
+	buffer = read_to_buffer(fd, buffer);
+	if (!buffer)
 		return (NULL);
-	line = extract_line(alloc);
-	alloc = update_alloc(alloc);
+	line = extract_line(buffer);
+	buffer = update_buffer(buffer);
 	return (line);
 }
