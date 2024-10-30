@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/30 00:53:35 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 01:15:25 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ size_t	ft_strlen(const char *s)
 char	*ft_strchr(const char *s, int c)
 {
 	char	ch;
-	int		i;
+	size_t	i;
 
 	ch = (char)c;
 	i = 0;
@@ -42,27 +42,27 @@ char	*ft_strchr(const char *s, int c)
 
 char	*ft_strjoin(char *s1, char *s2)
 {
+	size_t	len1;
+	size_t	len2;
 	size_t	i;
 	size_t	j;
 	char	*joined;
 
+	len1 = s1 ? ft_strlen(s1) : 0;
+	len2 = s2 ? ft_strlen(s2) : 0;
 	if (!s1 && !s2)
 		return (NULL);
-	joined = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	joined = malloc((len1 + len2 + 1) * sizeof(char));
 	if (!joined)
 		return (NULL);
 	i = 0;
 	j = 0;
 	while (s1 && s1[i])
-	{
-		joined[i] = s1[i];
-		i++;
-	}
-	while (s2[j])
-	{
-		joined[i++] = s2[j++];
-	}
-	joined[i] = '\0';
+		joined[j++] = s1[i++];
+	i = 0;
+	while (s2 && s2[i])
+		joined[j++] = s2[i++];
+	joined[j] = '\0';
 	free(s1);
 	return (joined);
 }
