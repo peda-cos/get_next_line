@@ -6,86 +6,64 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/30 01:49:06 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 02:49:44 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *str)
 {
 	size_t	len;
 
 	len = 0;
-	if (!s)
-		return (0);
-	while (s[len])
+	while (str[len])
 		len++;
 	return (len);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *str, int ch)
 {
-	char	ch;
-	size_t	i;
+	int	i;
 
-	ch = (char)c;
 	i = 0;
-	while (s[i])
+	if (!str)
+		return (0);
+	if (ch == '\0')
+		return ((char *)&str[ft_strlen(str)]);
+	while (str[i] != '\0')
 	{
-		if (s[i] == ch)
-			return ((char *)&s[i]);
+		if (str[i] == (char) ch)
+			return ((char *)&str[i]);
 		i++;
 	}
-	if (ch == '\0')
-		return ((char *)&s[i]);
 	return (NULL);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
-	char	*joined;
+	size_t	c;
+	char	*str;
 
-	if (!s1 && !s2)
-		return (NULL);
-	joined = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (!joined)
-		return (NULL);
-	i = 0;
-	while (s1 && *s1)
-		joined[i++] = *s1++;
-	while (s2 && *s2)
-		joined[i++] = *s2++;
-	joined[i] = '\0';
-	free(s1 - ft_strlen(s1));
-	return (joined);
-}
-
-char	*ft_extract_line(char *buffer)
-{
-	char	*line;
-	size_t	i;
-
-	i = 0;
-	if (!buffer[i])
-		return (NULL);
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	line = malloc((i + 2) * sizeof(char));
-	if (!line)
-		return (NULL);
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
+	if (!s1)
 	{
-		line[i] = buffer[i];
-		i++;
+		s1 = (char *)malloc(1 * sizeof(char));
+		if (!s1 || !s2)
+			return (NULL);
+		s1[0] = '\0';
 	}
-	if (buffer[i] == '\n')
-	{
-		line[i] = buffer[i];
-		i++;
-	}
-	line[i] = '\0';
-	return (line);
+	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	i = -1;
+	c = 0;
+	if (s1)
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
+	while (s2[c] != '\0')
+		str[i++] = s2[c++];
+	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
+	free(s1);
+	return (str);
 }
