@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/29 15:45:40 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 00:53:55 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*ft_read_until_newline(int fd, char *buffer)
 	if (!temp_buffer)
 		return (NULL);
 	bytes_read = 1;
-	while (!ft_strchr(buffer, '\n') && bytes_read != 0)
+	while ((!buffer || !ft_strchr(buffer, '\n')) && bytes_read != 0)
 	{
 		bytes_read = read(fd, temp_buffer, BUFFER_SIZE);
 		if (bytes_read == -1)

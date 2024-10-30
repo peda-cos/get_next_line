@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/29 15:29:41 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 00:53:35 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ char	*ft_update_buffer(char *buffer)
 		free(buffer);
 		return (NULL);
 	}
-	new_buffer = malloc((ft_strlen(buffer) - i) * sizeof(char));
+	new_buffer = malloc((ft_strlen(buffer) - i + 1) * sizeof(char));
 	if (!new_buffer)
 		return (NULL);
 	i++;
