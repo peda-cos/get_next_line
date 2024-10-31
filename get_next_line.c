@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/30 03:10:04 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:31:04 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,22 @@
 
 static char	*read_to_buffer(int fd, char *buffer)
 {
-	char	*temp_buffer;
+	char	temp_buffer[BUFFER_SIZE + 1];
 	ssize_t	bytes_read;
+	char	*new_buffer;
 
-	temp_buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!temp_buffer)
-		return (NULL);
 	bytes_read = 1;
 	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
 	{
 		bytes_read = read(fd, temp_buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-		{
-			free(temp_buffer);
 			return (NULL);
-		}
 		temp_buffer[bytes_read] = '\0';
-		buffer = ft_strjoin(buffer, temp_buffer);
-		if (!buffer)
-		{
-			free(temp_buffer);
+		new_buffer = ft_strjoin(buffer, temp_buffer);
+		if (!new_buffer)
 			return (NULL);
-		}
+		buffer = new_buffer;
 	}
-	free(temp_buffer);
 	return (buffer);
 }
 
@@ -55,7 +47,7 @@ static char	*update_buffer(char *buffer)
 		free(buffer);
 		return (NULL);
 	}
-	new_buffer = malloc((ft_strlen(buffer) - i + 1) * sizeof(char));
+	new_buffer = malloc((ft_strlen(buffer) - i) * sizeof(char));
 	if (!new_buffer)
 		return (NULL);
 	i++;
@@ -97,9 +89,10 @@ static char	*extract_line(char *alloc)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer = NULL;
+	static char	*buffer;
 	char		*line;
 
+	*buffer = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_to_buffer(fd, buffer);
