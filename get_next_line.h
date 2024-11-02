@@ -20,10 +20,8 @@
 # endif
 
 size_t	ft_strlen(const char *str);
-
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(const char *str, int ch);
-
 char	*get_next_line(int fd);
 
 #endif
