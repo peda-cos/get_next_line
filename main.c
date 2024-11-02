@@ -19,7 +19,6 @@
 int	main(int argc, char **argv)
 {
 	int		fd;
-	char	*line;
 
 	if (argc < 2)
 		fd = 0;
