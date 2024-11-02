@@ -14,16 +14,16 @@
 # define GET_NEXT_LINE_H
 
 # include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1024
+#  define BUFFER_SIZE 42
 # endif
 
 size_t	ft_strlen(const char *str);
+
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(const char *str, int ch);
+
 char	*get_next_line(int fd);
 
 #endif
