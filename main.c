@@ -32,13 +32,9 @@ int	main(int argc, char **argv)
 			return (1);
 		}
 	}
-	line = get_next_line(fd);
-	printf("%s", line);
-	line = get_next_line(fd);
-	printf("%s", line);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 	if (fd != 0)
 		close(fd);
 	return (0);
