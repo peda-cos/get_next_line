@@ -13,61 +13,61 @@
 #include "get_next_line.h"
 #include <unistd.h>
 
-static char	*allocator(char *alloc)
+static char	*ft_allocator(char *temp)
 {
 	int		i;
 	int		j;
 	char	*str;
 
 	i = 0;
-	while (alloc[i] && alloc[i] != '\n')
+	while (temp[i] && temp[i] != '\n')
 		i++;
-	if (!alloc[i])
+	if (!temp[i])
 	{
-		free(alloc);
+		free(temp);
 		return (NULL);
 	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(alloc) - i + 1));
+	str = (char *)malloc(sizeof(char) * (ft_strlen(temp) - i + 1));
 	if (!str)
 		return (NULL);
 	i++;
 	j = 0;
-	while (alloc[i])
-		str[j++] = alloc[i++];
+	while (temp[i])
+		str[j++] = temp[i++];
 	str[j] = '\0';
-	free(alloc);
+	free(temp);
 	return (str);
 }
 
-static char	*next_line(char *alloc)
+static char	*ft_next_line(char *temp)
 {
 	int		i;
 	char	*str;
 
 	i = 0;
-	if (!alloc[i])
+	if (!temp[i])
 		return (NULL);
-	while (alloc[i] && alloc[i] != '\n')
+	while (temp[i] && temp[i] != '\n')
 		i++;
 	str = (char *)malloc(sizeof(char) * (i + 2));
 	if (!str)
 		return (NULL);
 	i = 0;
-	while (alloc[i] && alloc[i] != '\n')
+	while (temp[i] && temp[i] != '\n')
 	{
-		str[i] = alloc[i];
+		str[i] = temp[i];
 		i++;
 	}
-	if (alloc[i] == '\n')
+	if (temp[i] == '\n')
 	{
-		str[i] = alloc[i];
+		str[i] = temp[i];
 		i++;
 	}
 	str[i] = '\0';
 	return (str);
 }
 
-static char	*read_alloc(int fd, char *alloc)
+static char	*ft_read_temp(int fd, char *temp)
 {
 	ssize_t	reader;
 	char	*buf;
@@ -76,7 +76,7 @@ static char	*read_alloc(int fd, char *alloc)
 	if (!buf)
 		return (NULL);
 	reader = 1;
-	while (!ft_strchr(alloc, '\n') && reader != 0)
+	while (!ft_strchr(temp, '\n') && reader != 0)
 	{
 		reader = read(fd, buf, BUFFER_SIZE);
 		if (reader == -1)
@@ -85,23 +85,23 @@ static char	*read_alloc(int fd, char *alloc)
 			return (NULL);
 		}
 		buf[reader] = '\0';
-		alloc = ft_strjoin(alloc, buf);
+		temp = ft_strjoin(temp, buf);
 	}
 	free(buf);
-	return (alloc);
+	return (temp);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*alloc;
+	static char	*temp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	alloc = read_alloc(fd, alloc);
-	if (!alloc)
+	temp = ft_read_temp(fd, temp);
+	if (!temp)
 		return (NULL);
-	line = next_line(alloc);
-	alloc = allocator(alloc);
+	line = ft_next_line(temp);
+	temp = ft_allocator(temp);
 	return (line);
 }
