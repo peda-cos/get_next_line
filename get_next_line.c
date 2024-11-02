@@ -13,7 +13,7 @@
 #include "get_next_line.h"
 #include <unistd.h>
 
-static char	*ft_allocator(char *temp)
+static char	*ft_manager(char *temp)
 {
 	int		i;
 	int		j;
@@ -102,6 +102,6 @@ char	*get_next_line(int fd)
 	if (!temp)
 		return (NULL);
 	line = ft_next_line(temp);
-	temp = ft_allocator(temp);
+	temp = ft_manager(temp);
 	return (line);
 }
