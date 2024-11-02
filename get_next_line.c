@@ -6,99 +6,102 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/10/31 16:32:04 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/02 15:38:03 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <unistd.h>
 
-static char	*read_to_buffer(int fd, char *buffer)
+static char	*allocator(char *alloc)
 {
-	char	temp_buffer[BUFFER_SIZE + 1];
-	ssize_t	bytes_read;
-	char	*new_buffer;
-
-	bytes_read = 1;
-	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
-	{
-		bytes_read = read(fd, temp_buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-			return (NULL);
-		temp_buffer[bytes_read] = '\0';
-		new_buffer = ft_strjoin(buffer, temp_buffer);
-		if (!new_buffer)
-			return (NULL);
-		buffer = new_buffer;
-	}
-	return (buffer);
-}
-
-static char	*update_buffer(char *buffer)
-{
-	size_t	i;
-	size_t	j;
-	char	*new_buffer;
+	int		i;
+	int		j;
+	char	*str;
 
 	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
+	while (alloc[i] && alloc[i] != '\n')
 		i++;
-	if (!buffer[i])
+	if (!alloc[i])
 	{
-		free(buffer);
+		free(alloc);
 		return (NULL);
 	}
-	new_buffer = malloc((ft_strlen(buffer) - i) * sizeof(char));
-	if (!new_buffer)
+	str = (char *)malloc(sizeof(char) * (ft_strlen(alloc) - i + 1));
+	if (!str)
 		return (NULL);
 	i++;
 	j = 0;
-	while (buffer[i])
-		new_buffer[j++] = buffer[i++];
-	new_buffer[j] = '\0';
-	free(buffer);
-	return (new_buffer);
+	while (alloc[i])
+		str[j++] = alloc[i++];
+	str[j] = '\0';
+	free(alloc);
+	return (str);
 }
 
-static char	*extract_line(char *alloc)
+static char	*next_line(char *alloc)
 {
 	int		i;
-	char	*line;
+	char	*str;
 
 	i = 0;
 	if (!alloc[i])
 		return (NULL);
 	while (alloc[i] && alloc[i] != '\n')
 		i++;
-	line = (char *)malloc(sizeof(char) * (i + 2));
-	if (!line)
+	str = (char *)malloc(sizeof(char) * (i + 2));
+	if (!str)
 		return (NULL);
 	i = 0;
 	while (alloc[i] && alloc[i] != '\n')
 	{
-		line[i] = alloc[i];
+		str[i] = alloc[i];
 		i++;
 	}
 	if (alloc[i] == '\n')
 	{
-		line[i] = alloc[i];
+		str[i] = alloc[i];
 		i++;
 	}
-	line[i] = '\0';
-	return (line);
+	str[i] = '\0';
+	return (str);
+}
+
+static char	*read_alloc(int fd, char *alloc)
+{
+	ssize_t	reader;
+	char	*buf;
+
+	buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buf)
+		return (NULL);
+	reader = 1;
+	while (!ft_strchr(alloc, '\n') && reader != 0)
+	{
+		reader = read(fd, buf, BUFFER_SIZE);
+		if (reader == -1)
+		{
+			free(buf);
+			return (NULL);
+		}
+		buf[reader] = '\0';
+		alloc = ft_strjoin(alloc, buf);
+	}
+	free(buf);
+	return (alloc);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
 	char		*line;
+	static char	*alloc;
 
-	*buffer = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = read_to_buffer(fd, buffer);
-	if (!buffer)
+	alloc = read_alloc(fd, alloc);
+	if (!alloc)
 		return (NULL);
-	line = extract_line(buffer);
-	buffer = update_buffer(buffer);
+	line = next_line(alloc);
+	alloc = allocator(alloc);
 	return (line);
 }
