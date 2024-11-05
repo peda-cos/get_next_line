@@ -13,7 +13,7 @@
 #include "get_next_line.h"
 #include <unistd.h>
 
-static char	*ft_manager(char *temp)
+static char	*manage_temp(char *temp)
 {
 	int		i;
 	int		j;
@@ -39,7 +39,7 @@ static char	*ft_manager(char *temp)
 	return (str);
 }
 
-static char	*ft_next_line(char *temp)
+static char	*extract_next_line(char *temp)
 {
 	int		i;
 	char	*str;
@@ -67,7 +67,7 @@ static char	*ft_next_line(char *temp)
 	return (str);
 }
 
-static char	*ft_read_temp(int fd, char *temp)
+static char	*read_temp(int fd, char *temp)
 {
 	ssize_t	reader;
 	char	*buf;
@@ -98,10 +98,10 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	temp = ft_read_temp(fd, temp);
+	temp = read_temp(fd, temp);
 	if (!temp)
 		return (NULL);
-	line = ft_next_line(temp);
-	temp = ft_manager(temp);
+	line = extract_next_line(temp);
+	temp = manage_temp(temp);
 	return (line);
 }
