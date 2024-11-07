@@ -56,12 +56,12 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!str)
 		return (NULL);
 	i = -1;
-	while (++i < ft_strlen(s1))
-	str[i] = s1[i];
+	while (s1[++i])
+		str[i] = s1[i];
 	j = 0;
-	while (j < ft_strlen(s2))
+	while (s2[j])
 		str[i++] = s2[j++];
-	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
+	str[i] = '\0';
 	free(s1);
 	return (str);
 }
