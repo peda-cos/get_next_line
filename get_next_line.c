@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/05 12:45:06 by peda-cos         ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   get_next_line.c									:+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: peda-cos <peda-cos@student.42sp.org.br>	+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2024/10/29 10:53:04 by peda-cos		  #+#	#+#			 */
+/*   Updated: 2024/11/05 12:45:06 by peda-cos		 ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "get_next_line.h"
@@ -51,7 +51,9 @@ static char	*extract_next_line(char *temp)
 		i++;
 	str = (char *)malloc(sizeof(char) * (i + 2));
 	if (!str)
+	{
 		return (NULL);
+	}
 	i = 0;
 	while (temp[i] && temp[i] != '\n')
 	{
@@ -99,7 +101,11 @@ char	*get_next_line(int fd)
 	}
 	temp = read_temp(fd, temp, buf);
 	if (!temp)
+	{
+		free(buf);
+		buf = NULL;
 		return (NULL);
+	}
 	line = extract_next_line(temp);
 	temp = manage_temp(temp);
 	return (line);
