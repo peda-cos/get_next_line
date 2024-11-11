@@ -51,9 +51,7 @@ static char	*extract_next_line(char *temp)
 		i++;
 	str = (char *)malloc(sizeof(char) * (i + 2));
 	if (!str)
-	{
 		return (NULL);
-	}
 	i = 0;
 	while (temp[i] && temp[i] != '\n')
 	{
@@ -85,6 +83,26 @@ static char	*read_temp(int fd, char *temp, char *buf)
 	return (temp);
 }
 
+static void	*free_temp_buf(char **temp, char **buf, char **line)
+{
+	if (*temp)
+	{
+		free(*temp);
+		*temp = NULL;
+	}
+	if (*buf)
+	{
+		free(*buf);
+		*buf = NULL;
+	}
+	if (line && *line)
+	{
+		free(*line);
+		*line = NULL;
+	}
+	return (NULL);
+}
+
 char	*get_next_line(int fd)
 {
 	char		*line;
@@ -92,7 +110,7 @@ char	*get_next_line(int fd)
 	static char	*buf;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
+		return (free_temp_buf(&temp, &buf, NULL));
 	if (!buf)
 	{
 		buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
@@ -101,12 +119,10 @@ char	*get_next_line(int fd)
 	}
 	temp = read_temp(fd, temp, buf);
 	if (!temp)
-	{
-		free(buf);
-		buf = NULL;
-		return (NULL);
-	}
+		return (free_temp_buf(&temp, &buf, NULL));
 	line = extract_next_line(temp);
 	temp = manage_temp(temp);
+	if (!temp)
+		free_temp_buf(&temp, &buf, &line);
 	return (line);
 }
