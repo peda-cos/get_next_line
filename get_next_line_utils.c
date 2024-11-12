@@ -38,3 +38,24 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		last = last->next;
 	last->next = new;
 }
+
+void	ft_delone(t_list *node, void (*del)(void *))
+{
+	if (!node)
+		return ;
+	if (del)
+		del(node->content);
+	free(node);
+}
+
+void	ft_lstclear(t_list **lst, void (*del)(void *))
+{
+	t_list	*temp;
+
+	while (*lst)
+	{
+		temp = (*lst)->next;
+		ft_delone(*lst, del);
+		*lst = temp;
+	}
+}
