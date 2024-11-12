@@ -32,5 +32,6 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 size_t	ft_strlen(const char *str);
+char	*ft_strchr(const char *s, int c);
 
 #endif

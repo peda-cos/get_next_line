@@ -6,71 +6,75 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/12 07:38:47 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/12 07:45:37 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static t_list	*get_fd_node(t_list **lst, int fd)
+static char	*ft_strchr(const char *s, int c)
 {
-	t_list	*temp;
-	t_list	*new_node;
-	char	*buffer;
+	char	ch;
+	int		i;
 
-	temp = *lst;
-	while (temp)
+	ch = (char)c;
+	i = 0;
+	while (s[i])
 	{
-		if (*(int *)(temp->content) == fd)
-			return (temp);
-		temp = temp->next;
+		if (s[i] == ch)
+			return ((char *)&s[i]);
+		i++;
 	}
-	buffer = (char *)malloc(sizeof(int) + 1);
-	if (!buffer)
-		return (NULL);
-	*(int *)buffer = fd;
-	new_node = ft_lstnew(buffer);
-	if (!new_node)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	ft_lstadd_back(lst, new_node);
-	return (new_node);
+	if (ch == '\0')
+		return ((char *)&s[i]);
+	return (NULL);
 }
 
-static char	*extract_line(t_list **lst, t_list *fd_node)
+static char	*ft_strcat(char *dst, const char *src)
 {
-	char	*line;
+	size_t	dst_len;
+	size_t	i;
+
+	dst_len = ft_strlen(dst);
+	i = 0;
+	while (src[i])
+	{
+		dst[dst_len + i] = src[i];
+		i++;
+	}
+	dst[dst_len + i] = '\0';
+	return (dst);
+}
+
+static char	*ft_strdup(const char *s)
+{
 	size_t	len;
+	char	*dup;
+	size_t	i;
+
+	len = ft_strlen(s) + 1;
+	dup = (char *)malloc(sizeof(char) * len);
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	return (dup);
+}
+
+static char	*get_line_from_list(t_list *lst)
+{
+	size_t	len;
+	char	*line;
 	t_list	*temp;
-	t_list	*prev;
-	char	*newline_pos;
 
 	len = 0;
-	line = NULL;
-	temp = fd_node->next;
-	prev = fd_node;
+	temp = lst;
 	while (temp)
 	{
-		newline_pos = ft_strchr(temp->content, '\n');
-		if (newline_pos)
-		{
-			len += newline_pos - temp->content + 1;
-			line = (char *)malloc(len + 1);
-			if (!line)
-				return (NULL);
-			line[0] = '\0';
-			temp = fd_node->next;
-			while (temp && temp != temp->next)
-			{
-				ft_strcat(line, temp->content);
-				if (ft_strchr(temp->content, '\n'))
-					break ;
-				temp = temp->next;
-			}
-			return (line);
-		}
 		len += ft_strlen(temp->content);
 		temp = temp->next;
 	}
@@ -78,11 +82,10 @@ static char	*extract_line(t_list **lst, t_list *fd_node)
 	if (!line)
 		return (NULL);
 	line[0] = '\0';
-	temp = fd_node->next;
-	while (temp)
+	while (lst)
 	{
-		ft_strcat(line, temp->content);
-		temp = temp->next;
+		ft_strcat(line, lst->content);
+		lst = lst->next;
 	}
 	return (line);
 }
@@ -90,29 +93,23 @@ static char	*extract_line(t_list **lst, t_list *fd_node)
 char	*get_next_line(int fd)
 {
 	static t_list	*lst;
-	t_list			*fd_node;
 	char			buffer[BUFFER_SIZE + 1];
 	int				bytes_read;
 	char			*newline_pos;
-	char			*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	fd_node = get_fd_node(&lst, fd);
-	if (!fd_node)
 		return (NULL);
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	while (bytes_read > 0)
 	{
 		buffer[bytes_read] = '\0';
-		ft_lstadd_back(&fd_node->next, ft_lstnew(ft_strdup(buffer)));
+		ft_lstadd_back(&lst, ft_lstnew(ft_strdup(buffer)));
 		newline_pos = ft_strchr(buffer, '\n');
 		if (newline_pos)
 			break ;
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
-	if (bytes_read < 0 || (!fd_node->next && bytes_read == 0))
+	if (bytes_read < 0 || (!lst && bytes_read == 0))
 		return (NULL);
-	line = extract_line(&lst, fd_node);
-	return (line);
+	return (get_line_from_list(lst));
 }
