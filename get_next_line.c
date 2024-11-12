@@ -38,7 +38,7 @@ static char	*ft_strcat(char *dest, const char *src)
 {
 	char	*ptr;
 
-	*ptr = dest;
+	ptr = dest;
 	while (*ptr != '\0')
 		ptr++;
 	while (*src != '\0')
