@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/12 07:32:19 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:54:19 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_list	*ft_lstnew(char *content)
 	return (new_node);
 }
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	ft_lstaddback(t_list **lst, t_list *new)
 {
 	t_list	*temp;
 
@@ -41,27 +41,18 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	temp->next = new;
 }
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
-{
-	if (lst && del)
-	{
-		del(lst->content);
-		free(lst);
-	}
-}
-
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+void	ft_lstclear(t_list **lst)
 {
 	t_list	*temp;
 
-	if (!lst || !del)
-		return ;
 	while (*lst)
 	{
 		temp = (*lst)->next;
-		ft_lstdelone(*lst, del);
+		free((*lst)->content);
+		free(*lst);
 		*lst = temp;
 	}
+	*lst = NULL;
 }
 
 size_t	ft_strlen(const char *str)
@@ -72,4 +63,20 @@ size_t	ft_strlen(const char *str)
 	while (str[len])
 		len++;
 	return (len);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	char ch;
+
+	ch = (char)c
+	while (*s)
+	{
+		if (*s == ch)
+			return ((char *)s);
+		s++;
+	}
+	if (ch == '\0')
+		return ((char *)s);
+	return (NULL);
 }
