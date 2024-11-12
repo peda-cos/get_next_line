@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/12 16:18:20 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:47:20 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,13 @@ static void	read_and_build_list(int fd, t_list **lst, int *bytes_read)
 {
 	char	buffer[BUFFER_SIZE + 1];
 	char	*temp;
+	t_list	*new_node;
 
 	*bytes_read = read(fd, buffer, BUFFER_SIZE);
 	while (*bytes_read > 0)
 	{
 		buffer[*bytes_read] = '\0';
+		new_node = ft_lstnew(ft_strjoin("", buffer));
 		if (*lst)
 		{
 			temp = ft_strjoin((*lst)->content, buffer);
@@ -55,7 +57,7 @@ static void	read_and_build_list(int fd, t_list **lst, int *bytes_read)
 			(*lst)->content = temp;
 		}
 		else
-			*lst = ft_lstnew(ft_strdup(buffer));
+			*lst = new_node;
 		if (ft_strchr(buffer, '\n'))
 			break ;
 		*bytes_read = read(fd, buffer, BUFFER_SIZE);
@@ -66,14 +68,15 @@ static	char *ft_get_line(t_list *lst)
 {
 	size_t	len;
 	char	*line;
-	t_list	*temp;
+	char	*temp;
+	t_list	*temp_lst;
 
 	len = 0;
-	temp = lst;
-	while (temp)
+	temp_lst = lst;
+	while (temp_lst)
 	{
-		len += ft_strlen(temp->content);
-		temp = temp->next;
+		len += ft_strlen(temp_lst->content);
+		temp_lst = temp_lst->next;
 	}
 	line = (char *)malloc(len + 1);
 	if (!line)
@@ -81,7 +84,9 @@ static	char *ft_get_line(t_list *lst)
 	line[0] = '\0';
 	while (lst)
 	{
-		ft_strcat(line, lst->content);
+		temp = ft_strjoin(line, lst->content);
+		free(line);
+		line = temp;
 		lst = lst->next;
 	}
 	return (line);
