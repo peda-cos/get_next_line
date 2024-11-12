@@ -6,11 +6,33 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/12 15:53:37 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:09:20 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+static char	*ft_strdup(const char *s)
+{
+	size_t	len;
+	char	*dup;
+	size_t	i;
+
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	dup = (char *)malloc(sizeof(char) * (len + 1));
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
+}
 
 static char	*ft_strcat(char *dest, const char *src)
 {
@@ -29,7 +51,7 @@ static char	*ft_strcat(char *dest, const char *src)
 	return (dest);
 }
 
-static	char *get_line(t_list *lst)
+static	char *ft_get_line(t_list *lst)
 {
 	size_t	len;
 	char	*line;
@@ -67,7 +89,7 @@ char	*get_next_line(int fd)
 	while (bytes_read > 0)
 	{
 		buffer[bytes_read] = '\0';
-		ft_lstaddback(&lst, ft_lstnew(strdup(buffer)));
+		ft_lstaddback(&lst, ft_lstnew(ft_strdup(buffer)));
 		newline_pos = ft_strchr(buffer, '\n');
 		if (newline_pos)
 			break ;
@@ -75,5 +97,5 @@ char	*get_next_line(int fd)
 	}
 	if (bytes_read < 0 || (!lst && bytes_read == 0))
 		return (NULL);
-	return (get_line(lst));
+	return (ft_get_line(lst));
 }
