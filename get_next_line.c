@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/12 16:09:20 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:18:20 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ char	*get_next_line(int fd)
 	char		buffer[BUFFER_SIZE + 1];
 	int		bytes_read;
 	char		*newline_pos;
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -96,6 +97,11 @@ char	*get_next_line(int fd)
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
 	if (bytes_read < 0 || (!lst && bytes_read == 0))
+	{
+		ft_lstclear(&lst);
 		return (NULL);
-	return (ft_get_line(lst));
+	}
+	line = ft_get_line(lst);
+	ft_lstclear(&lst);
+	return (line);
 }
