@@ -32,7 +32,7 @@ static size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	return (dst_len + src_len);
 }
 
-char	*ft_strdup(const char *s)
+static char	*ft_strdup(const char *s)
 {
 	size_t	len;
 	char	*dup;
@@ -51,7 +51,7 @@ char	*ft_strdup(const char *s)
 	return (dup);
 }
 
-char	*ft_strchr(const char *s, int c)
+static char	*ft_strchr(const char *s, int c)
 {
 	char	ch;
 	int		i;
