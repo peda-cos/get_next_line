@@ -6,30 +6,26 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/12 06:29:49 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/12 06:35:05 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static size_t	ft_strlcat(char *dst, const char *src, size_t size)
+static char	*ft_strcat(char *dst, const char *src)
 {
 	size_t	dst_len;
-	size_t	src_len;
 	size_t	i;
 
 	dst_len = ft_strlen(dst);
-	src_len = ft_strlen(src);
-	if (size <= dst_len)
-		return (size + src_len);
 	i = 0;
-	while (src[i] && (dst_len + i) < (size - 1))
+	while (src[i])
 	{
 		dst[dst_len + i] = src[i];
 		i++;
 	}
 	dst[dst_len + i] = '\0';
-	return (dst_len + src_len);
+	return (dst);
 }
 
 static char	*ft_strdup(const char *s)
@@ -88,7 +84,7 @@ static char	*get_line_from_list(t_list *lst)
 	line[0] = '\0';
 	while (lst)
 	{
-		ft_strlcat(line, lst->content);
+		ft_strcat(line, lst->content);
 		lst = lst->next;
 	}
 	return (line);
