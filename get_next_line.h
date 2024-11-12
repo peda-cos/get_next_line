@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:52:36 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/12 06:12:29 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/12 07:10:20 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ typedef struct s_list
 char	*get_next_line(int fd);
 t_list	*ft_lstnew(char *content);
 void	ft_lstadd_back(t_list **lst, t_list *new);
-void	ft_lstdelone(t_list *lst, void (*del)(void *));
-void	ft_lstclear(t_list **lst, void (*del)(void *));
+void	ft_lstdel(t_list **lst);
 size_t	ft_strlen(const char *str);
+char	*ft_strdup(const char *s);
 
 #endif

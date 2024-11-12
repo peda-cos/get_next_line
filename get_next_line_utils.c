@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/12 06:12:19 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/12 07:10:14 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,15 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	temp->next = new;
 }
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
-{
-	if (lst && del)
-	{
-		del(lst->content);
-		free(lst);
-	}
-}
-
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+void	ft_lstdel(t_list **lst)
 {
 	t_list	*temp;
 
-	while (lst && *lst)
+	while (*lst)
 	{
 		temp = (*lst)->next;
-		ft_lstdelone(*lst, del);
+		free((*lst)->content);
+		free(*lst);
 		*lst = temp;
 	}
 }
@@ -70,4 +62,24 @@ size_t	ft_strlen(const char *str)
 	while (str[len])
 		len++;
 	return (len);
+}
+
+char	*ft_strdup(const char *s)
+{
+	size_t	len;
+	char	*dup;
+	size_t	i;
+
+	len = ft_strlen(s);
+	dup = (char *)malloc(sizeof(char) * (len + 1));
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
 }
