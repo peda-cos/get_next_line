@@ -79,6 +79,8 @@ static char	*read_temp(int fd, char *temp, char *buf)
 			return (NULL);
 		buf[reader] = '\0';
 		temp = ft_strjoin(temp, buf);
+		if (!temp)
+			return (NULL);
 	}
 	return (temp);
 }
@@ -107,22 +109,20 @@ char	*get_next_line(int fd)
 {
 	char		*line;
 	static char	*temp;
-	static char	*buf;
+	char		*buf;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (free_temp_buf(&temp, &buf, NULL));
+		return (free_temp_buf(&temp, NULL, NULL));
+	buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buf)
-	{
-		buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
-		if (!buf)
-			return (NULL);
-	}
-	temp = read_temp(fd, temp, buf);
-	if (!temp)
 		return (free_temp_buf(&temp, &buf, NULL));
+	temp = read_temp(fd, temp, buf);
+	free(buf);
+	if (!temp)
+		return (free_temp_buf(&temp, NULL, NULL));
 	line = extract_next_line(temp);
 	temp = manage_temp(temp);
 	if (!temp)
-		free_temp_buf(&temp, &buf, &line);
+		free_temp_buf(&temp, NULL, &line);
 	return (line);
 }
