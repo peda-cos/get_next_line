@@ -6,66 +6,30 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/12 07:45:37 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:53:37 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*ft_strchr(const char *s, int c)
+static char	*ft_strcat(char *dest, const char *src)
 {
-	char	ch;
-	int		i;
+	char	*ptr;
 
-	ch = (char)c;
-	i = 0;
-	while (s[i])
+	*ptr = dest;
+	while (*ptr != '\0')
+		ptr++;
+	while (*src != '\0')
 	{
-		if (s[i] == ch)
-			return ((char *)&s[i]);
-		i++;
+		*ptr = *src;
+		ptr++;
+		src++;
 	}
-	if (ch == '\0')
-		return ((char *)&s[i]);
-	return (NULL);
+	*ptr = '\0';
+	return (dest);
 }
 
-static char	*ft_strcat(char *dst, const char *src)
-{
-	size_t	dst_len;
-	size_t	i;
-
-	dst_len = ft_strlen(dst);
-	i = 0;
-	while (src[i])
-	{
-		dst[dst_len + i] = src[i];
-		i++;
-	}
-	dst[dst_len + i] = '\0';
-	return (dst);
-}
-
-static char	*ft_strdup(const char *s)
-{
-	size_t	len;
-	char	*dup;
-	size_t	i;
-
-	len = ft_strlen(s) + 1;
-	dup = (char *)malloc(sizeof(char) * len);
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	return (dup);
-}
-
-static char	*get_line_from_list(t_list *lst)
+static	char *get_line(t_list *lst)
 {
 	size_t	len;
 	char	*line;
@@ -93,9 +57,9 @@ static char	*get_line_from_list(t_list *lst)
 char	*get_next_line(int fd)
 {
 	static t_list	*lst;
-	char			buffer[BUFFER_SIZE + 1];
-	int				bytes_read;
-	char			*newline_pos;
+	char		buffer[BUFFER_SIZE + 1];
+	int		bytes_read;
+	char		*newline_pos;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -103,7 +67,7 @@ char	*get_next_line(int fd)
 	while (bytes_read > 0)
 	{
 		buffer[bytes_read] = '\0';
-		ft_lstadd_back(&lst, ft_lstnew(ft_strdup(buffer)));
+		ft_lstaddback(&lst, ft_lstnew(strdup(buffer)));
 		newline_pos = ft_strchr(buffer, '\n');
 		if (newline_pos)
 			break ;
@@ -111,5 +75,5 @@ char	*get_next_line(int fd)
 	}
 	if (bytes_read < 0 || (!lst && bytes_read == 0))
 		return (NULL);
-	return (get_line_from_list(lst));
+	return (get_line(lst));
 }
