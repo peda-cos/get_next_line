@@ -12,43 +12,54 @@
 
 #include "get_next_line.h"
 
-static char	*ft_strdup(const char *s)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
-	size_t	len;
-	char	*dup;
+	char	*join;
 	size_t	i;
+	size_t	j;
 
-	len = 0;
-	while (s[len] != '\0')
-		len++;
-	dup = (char *)malloc(sizeof(char) * (len + 1));
-	if (!dup)
+	if (!s1 || !s2)
+		return (NULL);
+	join = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!join)
 		return (NULL);
 	i = 0;
-	while (i < len)
+	while (i < ft_strlen(s1))
 	{
-		dup[i] = s[i];
+		join[i] = s1[i];
 		i++;
 	}
-	dup[i] = '\0';
-	return (dup);
+	j = 0;
+	while (j < ft_strlen(s2))
+	{
+		join[i + j] = s2[j];
+		j++;
+	}
+	join[i + j] = '\0';
+	return (join);
 }
 
-static char	*ft_strcat(char *dest, const char *src)
+static void	read_and_build_list(int fd, t_list **lst, int *bytes_read)
 {
-	char	*ptr;
+	char	buffer[BUFFER_SIZE + 1];
+	char	*temp;
 
-	ptr = dest;
-	while (*ptr != '\0')
-		ptr++;
-	while (*src != '\0')
+	*bytes_read = read(fd, buffer, BUFFER_SIZE);
+	while (*bytes_read > 0)
 	{
-		*ptr = *src;
-		ptr++;
-		src++;
+		buffer[*bytes_read] = '\0';
+		if (*lst)
+		{
+			temp = ft_strjoin((*lst)->content, buffer);
+			free((*lst)->content);
+			(*lst)->content = temp;
+		}
+		else
+			*lst = ft_lstnew(ft_strdup(buffer));
+		if (ft_strchr(buffer, '\n'))
+			break ;
+		*bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
-	*ptr = '\0';
-	return (dest);
 }
 
 static	char *ft_get_line(t_list *lst)
@@ -79,23 +90,12 @@ static	char *ft_get_line(t_list *lst)
 char	*get_next_line(int fd)
 {
 	static t_list	*lst;
-	char		buffer[BUFFER_SIZE + 1];
-	int		bytes_read;
-	char		*newline_pos;
 	char		*line;
+	int		bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	while (bytes_read > 0)
-	{
-		buffer[bytes_read] = '\0';
-		ft_lstaddback(&lst, ft_lstnew(ft_strdup(buffer)));
-		newline_pos = ft_strchr(buffer, '\n');
-		if (newline_pos)
-			break ;
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-	}
+	read_and_build_list(fd, &lst, &bytes_read);
 	if (bytes_read < 0 || (!lst && bytes_read == 0))
 	{
 		ft_lstclear(&lst);
