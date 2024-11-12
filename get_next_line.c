@@ -12,22 +12,6 @@
 
 #include "get_next_line.h"
 
-static char	*string_char(const char *s, int c)
-{
-	char	ch;
-
-	ch = (char)c;
-	while (*s)
-	{
-		if (*s == ch)
-			return ((char *)s);
-		s++;
-	}
-	if (ch == '\0')
-		return ((char *)s);
-	return (NULL);
-}
-
 static size_t	get_line_length(t_list *lst)
 {
 	size_t	len;
@@ -86,30 +70,36 @@ static char	*extract_line(t_list **lst)
 	return (line);
 }
 
-char	*get_next_line(int fd)
+static int	read_and_store(int fd, t_list **lst)
 {
-	static t_list	*lst;
-	t_list			*new_node;
-	char			buffer[BUFFER_SIZE + 1];
-	char			*newline_pos;
-	int				bytes_read;
+	t_list	*new_node;
+	char	buffer[BUFFER_SIZE + 1];
+	int		bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	while ((bytes_read = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[bytes_read] = '\0';
 		new_node = ft_lstnew(ft_strdup(buffer));
 		if (!new_node)
 		{
-			ft_lstdel(&lst);
-			return (NULL);
+			ft_lstdel(lst);
+			return (-1);
 		}
-		ft_lstadd_back(&lst, new_node);
-		newline_pos = string_char(buffer, '\n');
-		if (newline_pos)
+		ft_lstadd_back(lst, new_node);
+		if (string_char(buffer, '\n'))
 			break ;
 	}
+	return (bytes_read);
+}
+
+char	*get_next_line(int fd)
+{
+	static t_list	*lst;
+	int				bytes_read;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	bytes_read = read_and_store(fd, &lst);
 	if (bytes_read < 0 || (!lst && bytes_read == 0))
 	{
 		ft_lstdel(&lst);
