@@ -12,31 +12,39 @@
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(const char *s1, const char *s2)
+static char	*ft_strcat(char *dst, const char *src)
 {
-	char	*join;
+	size_t	dst_len;
 	size_t	i;
-	size_t	j;
 
-	if (!s1 || !s2)
-		return (NULL);
-	join = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!join)
-		return (NULL);
+	dst_len = ft_strlen(dst);
 	i = 0;
-	while (i < ft_strlen(s1))
+	while (src[i])
 	{
-		join[i] = s1[i];
+		dst[dst_len + i] = src[i];
 		i++;
 	}
-	j = 0;
-	while (j < ft_strlen(s2))
+	dst[dst_len + i] = '\0';
+	return (dst);
+}
+
+static char	*ft_strdup(const char *s)
+{
+	size_t	len;
+	char	*dup;
+	size_t	i;
+
+	len = ft_strlen(s) + 1;
+	dup = (char *)malloc(sizeof(char) * len);
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < len)
 	{
-		join[i + j] = s2[j];
-		j++;
+		dup[i] = s[i];
+		i++;
 	}
-	join[i + j] = '\0';
-	return (join);
+	return (dup);
 }
 
 static void read_and_build_list(int fd, t_list **lst, int *bytes_read)
