@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:49:23 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/13 12:40:19 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/13 12:54:19 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	joined = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!joined)
 		return (NULL);
-
 	i = 0;
 	while (s1[i])
 	{
