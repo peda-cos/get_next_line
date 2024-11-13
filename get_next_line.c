@@ -39,7 +39,7 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	return (join);
 }
 
-static void	read_and_build_list(int fd, t_list **lst, int *bytes_read)
+static void read_and_build_list(int fd, t_list **lst, int *bytes_read)
 {
 	char	buffer[BUFFER_SIZE + 1];
 	char	*temp;
@@ -57,9 +57,9 @@ static void	read_and_build_list(int fd, t_list **lst, int *bytes_read)
 			(*lst)->content = temp;
 		}
 		else
-			*lst = new_node;
+		*lst = new_node;
 		if (ft_strchr(buffer, '\n'))
-			break ;
+			break;
 		*bytes_read = read(fd, buffer, BUFFER_SIZE);
 	}
 }

@@ -69,7 +69,7 @@ char	*ft_strchr(const char *s, int c)
 {
 	char ch;
 
-	ch = (char)c
+	ch = (char)c;
 	while (*s)
 	{
 		if (*s == ch)
