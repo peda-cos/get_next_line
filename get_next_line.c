@@ -18,23 +18,26 @@ static char	*read_line(int fd, char *buf, char *backup)
 	char	*temp;
 
 	bytes_read = 1;
-	temp = NULL;
-	while (bytes_read != 0)
+	if (!backup)
+	{
+		backup = ft_strdup("");
+		if (!backup)
+			return (NULL);
+	}
+	while (!ft_strchr(backup, '\n') && bytes_read != 0)
 	{
 		bytes_read = read(fd, buf, BUFFER_SIZE);
 		if (bytes_read == -1)
+		{
+			free(backup);
 			return (NULL);
-		if (bytes_read == 0)
-			break ;
+		}
 		buf[bytes_read] = '\0';
-		if (!backup)
-			backup = ft_strdup("");
 		temp = backup;
 		backup = ft_strjoin(temp, buf);
 		free(temp);
-		temp = NULL;
-		if (ft_strchr(backup, '\n'))
-			break ;
+		if (!backup)
+			return (NULL);
 	}
 	return (backup);
 }
