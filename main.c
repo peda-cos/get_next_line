@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 16:36:19 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/14 16:38:30 by peda-cos         ###   ########.fr       */
+/*   Updated: 2024/11/15 00:41:04 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@
 
 int	main(int argc, char **argv)
 {
-	int fd;
-	char *line;
-	int i = 1;
-
+	int		fd;
+	char	*line;
+	int		i;
+	
+	i = 1;
 	while (i < argc)
     {
 		fd = open(argv[i], O_RDONLY);
