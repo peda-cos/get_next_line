@@ -80,4 +80,4 @@ Notes
 
 Good luck, cadet! You’ve got this. I’m confident you’ll nail it! 😄
 
-![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+![norminette](https://github.com/peda-cos/get_next_line/actions/workflows/main.yml/badge.svg)
