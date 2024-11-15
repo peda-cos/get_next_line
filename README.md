@@ -2,6 +2,9 @@
 
 This repository contains an implementation of the `get_next_line` function, which reads one line from a file descriptor at a time, making it useful for processing large files without reading them entirely into memory.
 
+#### Norminette
+![norminette](https://github.com/peda-cos/get_next_line/actions/workflows/main.yml/badge.svg)
+
 ## Files Overview
 
 - `get_next_line.c` - The implementation of the `get_next_line` function.
@@ -105,5 +108,3 @@ Notes
 - You can also add more test files or modify existing ones in the `tests/` directory to suit your needs.
 
 Good luck, cadet! You’ve got this. I’m confident you’ll nail it! 😄
-
-![norminette](https://github.com/peda-cos/get_next_line/actions/workflows/main.yml/badge.svg)
