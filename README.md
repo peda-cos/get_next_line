@@ -79,3 +79,5 @@ Notes
 - You can also add more test files or modify existing ones in the `tests/` directory to suit your needs.
 
 Good luck, cadet! You’ve got this. I’m confident you’ll nail it! 😄
+
+![norminette](https://github.com/peda-cos/get_next_line/actions/workflows/main.yml/badge.svg)
