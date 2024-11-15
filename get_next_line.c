@@ -12,16 +12,10 @@
 
 #include "get_next_line.h"
 
-static char	*read_buffer(int fd, char *buf, char *backup, int *bytes_read)
+static char	*handle_read_error(char *backup)
 {
-	*bytes_read = read(fd, buf, BUFFER_SIZE);
-	if (*bytes_read == -1)
-	{
-		free(backup);
-		return (NULL);
-	}
-	buf[*bytes_read] = '\0';
-	return (ft_strjoin(backup, buf));
+	free(backup);
+	return (NULL);
 }
 
 static char	*read_line(int fd, char *buf, char *backup)
@@ -38,10 +32,15 @@ static char	*read_line(int fd, char *buf, char *backup)
 	}
 	while (!ft_strchr(backup, '\n') && bytes_read != 0)
 	{
-		backup = read_buffer(fd, buf, backup, &bytes_read);
+		bytes_read = read(fd, buf, BUFFER_SIZE);
+		if (bytes_read == -1)
+			return (handle_read_error(backup));
+		buf[bytes_read] = '\0';
+		temp = backup;
+		backup = ft_strjoin(temp, buf);
+		free(temp);
 		if (!backup)
 			return (NULL);
-		temp = backup;
 	}
 	return (backup);
 }
