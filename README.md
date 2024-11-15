@@ -27,7 +27,7 @@ int	main(int argc, char **argv)
 		fd = open(argv[i], O_RDONLY);
 		while ((line = get_next_line(fd)) != NULL)
 		{
-			printf("%s\n", line);
+			printf("%s", line);
 			free(line);
 		}
 		close(fd);
