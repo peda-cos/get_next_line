@@ -12,6 +12,8 @@
 
 #include "get_next_line.h"
 aaidjaiosdjaisdji
+
+sdajisdajsid
 static char	*read_line(int fd, char *buf, char *backup)
 {
 	int		bytes_read;
