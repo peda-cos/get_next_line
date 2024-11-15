@@ -6,6 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     name: 42 Norminette
     steps:
-    - uses: alexandregv/norminette-action@v3.3.51
+    - uses: alexandregv/norminette-action@v3.3.53
       with:
         flags: '.'
