@@ -1,5 +1,7 @@
 # Get Next Line
 
+![norminette](https://github.com/<OWNER>/<REPOSITORY>/workflows/<WORKFLOW_NAME_OR_FILE>/badge.svg)
+
 This repository contains an implementation of the `get_next_line` function, which reads one line from a file descriptor at a time, making it useful for processing large files without reading them entirely into memory.
 
 ## Files Overview
