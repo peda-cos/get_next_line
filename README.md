@@ -4,11 +4,38 @@ This repository contains an implementation of the `get_next_line` function, whic
 
 ## Files Overview
 
-- `main.c` - The main program that runs the test cases.
 - `get_next_line.c` - The implementation of the `get_next_line` function.
 - `get_next_line_utils.c` - Utility functions used by `get_next_line`.
 - `get_next_line.h` - Header file defining the function prototypes and necessary includes.
 - `tests/` - A directory containing various test files for testing the `get_next_line` implementation.
+
+### `main.c`
+
+```c
+#include "get_next_line.h"
+#include <fcntl.h>
+#include <stdio.h>
+
+int	main(int argc, char **argv)
+{
+	int fd;
+	char *line;
+	int i = 1;
+
+	while (i < argc)
+    {
+		fd = open(argv[i], O_RDONLY);
+		while ((line = get_next_line(fd)) != NULL)
+		{
+			printf("%s\n", line);
+			free(line);
+		}
+		close(fd);
+		i++;
+    }
+	return 0;
+}
+```
 
 ## How to Use
 
