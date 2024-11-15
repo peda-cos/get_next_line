@@ -79,3 +79,5 @@ Notes
 - You can also add more test files or modify existing ones in the `tests/` directory to suit your needs.
 
 Good luck, cadet! You’ve got this. I’m confident you’ll nail it! 😄
+
+![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
