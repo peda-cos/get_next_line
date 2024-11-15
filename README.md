@@ -86,7 +86,6 @@ Here’s a brief overview of the test files available in the `tests/` folder:
 - `empty` - An empty file.
 - `large_file.txt` - A large file to test performance with large inputs.
 - `one_big_fat_line.txt` - A file with one large line of text.
-- `over_buffer` - A file where the size of the content exceeds the buffer size.
 - `Mr. Justice Maxell by Edgar Wallace.txt` - A text file from a public domain book.
 - `65_line_nl`, `64_line_nl`, `63_line_nl` - Files with 65, 64, and 63 lines, each ending with a newline.
 - `64_line`, `63_line`, `65_line` - Files with 64, 63, and 65 lines, without a newline at the end of the last line.
