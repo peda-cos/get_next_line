@@ -1,11 +1,5 @@
 # .github/workflows/main.yml
-on:
-  push:
-    paths-ignore:
-      - 'main.c'
-  pull_request:
-    paths-ignore:
-      - 'main.c'
+on: [push, pull_request]
 
 jobs:
   norminette_job:
@@ -16,4 +10,3 @@ jobs:
     - uses: alexandregv/norminette-action@v3
       with:
         flags: '.'
-
