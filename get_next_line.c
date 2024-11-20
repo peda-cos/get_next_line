@@ -68,10 +68,7 @@ static char	*new_backup(char *backup)
 	while (backup[i] && backup[i] != '\n')
 		i++;
 	if (!backup[i])
-	{
-		free(backup);
-		return (NULL);
-	}
+		return (handle_read_error(backup));
 	temp = ft_substr(backup, i + 1, ft_strlen(backup) - i);
 	free(backup);
 	return (temp);
