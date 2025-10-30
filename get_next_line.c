@@ -6,90 +6,101 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:53:04 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/13 12:45:20 by peda-cos         ###   ########.fr       */
+/*   Updated: 2025/10/30 07:59:05 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*handle_read_error(char *backup)
-{
-	free(backup);
-	return (NULL);
-}
-
-static char	*read_line(int fd, char *buf, char *backup)
-{
-	int		bytes_read;
-	char	*temp;
-
-	bytes_read = 1;
-	if (!backup)
-	{
-		backup = ft_strdup("");
-		if (!backup)
-			return (NULL);
-	}
-	while (!ft_strchr(backup, '\n') && bytes_read != 0)
-	{
-		bytes_read = read(fd, buf, BUFFER_SIZE);
-		if (bytes_read == -1)
-			return (handle_read_error(backup));
-		buf[bytes_read] = '\0';
-		temp = backup;
-		backup = ft_strjoin(temp, buf);
-		free(temp);
-		if (!backup)
-			return (NULL);
-	}
-	return (backup);
-}
-
-static char	*get_line(char *backup)
+char	*ft_get_line(char *save)
 {
 	int		i;
-	char	*line;
+	char	*str;
 
 	i = 0;
-	if (!backup[i])
+	if (!save[i])
 		return (NULL);
-	while (backup[i] && backup[i] != '\n')
+	while (save[i] && save[i] != '\n')
 		i++;
-	line = ft_substr(backup, 0, i + 1);
-	return (line);
+	str = (char *)malloc(sizeof(char) * (i + 2));
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (save[i] && save[i] != '\n')
+	{
+		str[i] = save[i];
+		i++;
+	}
+	if (save[i] == '\n')
+	{
+		str[i] = save[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }
 
-static char	*new_backup(char *backup)
+char	*ft_save(char *save)
 {
 	int		i;
-	char	*temp;
+	int		j;
+	char	*str;
 
 	i = 0;
-	while (backup[i] && backup[i] != '\n')
+	while (save[i] && save[i] != '\n')
 		i++;
-	if (!backup[i])
-		return (handle_read_error(backup));
-	temp = ft_substr(backup, i + 1, ft_strlen(backup) - i);
-	free(backup);
-	return (temp);
+	if (!save[i])
+	{
+		free(save);
+		return (NULL);
+	}
+	str = (char *)malloc(sizeof(char) * (ft_strlen(save) - i + 1));
+	if (!str)
+		return (NULL);
+	i++;
+	j = 0;
+	while (save[i])
+		str[j++] = save[i++];
+	str[j] = '\0';
+	free(save);
+	return (str);
+}
+
+char	*ft_read_and_save(int fd, char *save)
+{
+	char	*buff;
+	int		rd_bytes;
+
+	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buff)
+		return (NULL);
+	rd_bytes = 1;
+	while (!ft_strchr(save, '\n') && rd_bytes != 0)
+	{
+		rd_bytes = read(fd, buff, BUFFER_SIZE);
+		if (rd_bytes == -1)
+		{
+			free(buff);
+			return (NULL);
+		}
+		buff[rd_bytes] = '\0';
+		save = ft_strjoin(save, buff);
+	}
+	free(buff);
+	return (save);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*backup;
-	char		*buf;
+	static char	*save;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
+	save = ft_read_and_save(fd, save);
+	if (!save)
 		return (NULL);
-	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buf)
-		return (NULL);
-	backup = read_line(fd, buf, backup);
-	free(buf);
-	if (!backup)
-		return (NULL);
-	line = get_line(backup);
-	backup = new_backup(backup);
+	line = ft_get_line(save);
+	save = ft_save(save);
 	return (line);
 }
