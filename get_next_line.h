@@ -6,7 +6,7 @@
 /*   By: peda-cos <peda-cos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 10:52:36 by peda-cos          #+#    #+#             */
-/*   Updated: 2024/11/13 17:43:20 by peda-cos         ###   ########.fr       */
+/*   Updated: 2025/10/30 07:59:05 by peda-cos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,9 @@
 #  define BUFFER_SIZE 42
 # endif
 
-size_t	ft_strlen(const char *str);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*get_next_line(int fd);
+char	*ft_strchr(char *s, int c);
+char	*ft_strjoin(char *s1, char *s2);
+size_t	ft_strlen(char *s);
 
 #endif
