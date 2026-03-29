@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: peda-cos <peda-cos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static int	find_newline_position(const char *str)
 {
@@ -84,15 +84,15 @@ static char	*get_remaining_after_line(char *stash)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[MAX_FD];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0)
 		return (NULL);
-	stash = read_until_newline(fd, stash);
-	if (!stash)
+	stash[fd] = read_until_newline(fd, stash[fd]);
+	if (!stash[fd])
 		return (NULL);
-	line = extract_line_from_stash(stash);
-	stash = get_remaining_after_line(stash);
+	line = extract_line_from_stash(stash[fd]);
+	stash[fd] = get_remaining_after_line(stash[fd]);
 	return (line);
 }

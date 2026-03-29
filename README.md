@@ -1,82 +1,41 @@
+*This project has been created as part of the 42 curriculum by peda-cos*
+
 # Get Next Line
 
-A C implementation of a function that reads a line from a file descriptor, one line at a time. This project is part of the 42 School curriculum and demonstrates efficient file reading with dynamic memory management.
+A C function that reads a line from a file descriptor, one line at a time.
 
-## 📋 Description
+## Description
 
-`get_next_line` is a function that returns a line read from a file descriptor. The function handles multiple file descriptors simultaneously and manages memory efficiently by using a static variable to preserve data between consecutive calls. Each call to the function returns the next line from the file, including the newline character (if present), until the end of the file is reached.
+Get Next Line is a utility function that reads from a file descriptor and returns one line at a time. A line is defined as a sequence of characters ending with a newline character (`\n`) or the end of file (EOF). This project demonstrates the use of static variables in C to maintain state between function calls.
 
-## 🛠 Technology Stack
+### Key Features
 
-- **Language**: C (C99 standard compliant)
-- **System Calls**: `read`, `malloc`, `free`
-- **Build System**: Manual compilation with gcc/clang
-- **Testing**: Custom test files with various edge cases
+- Reads from any file descriptor (files, standard input, pipes)
+- Returns one line per call, including the newline character when present
+- Handles any buffer size (defined at compile time)
+- Memory leak-free implementation
+- Bonus: Supports multiple file descriptors simultaneously
 
-### Technical Requirements
-- Must compile with `-Wall -Wextra -Werror` flags
-- No memory leaks allowed
-- Configurable buffer size via `BUFFER_SIZE` macro
-- Uses only allowed functions: `read`, `malloc`, `free`
+## Instructions
 
-## 🏗 Project Architecture
+### Compilation
 
-The project follows a modular architecture with clear separation of concerns:
-
-### Core Components
-
-1. **Main Function** (`get_next_line.c`)
-   - Entry point that orchestrates line reading
-   - Manages static backup buffer between calls
-   - Handles file descriptor validation and buffer allocation
-
-2. **Utility Functions** (`get_next_line_utils.c`)
-   - `ft_strlen`: Calculate string length
-   - `ft_strchr`: Search for character in string
-   - `ft_strdup`: Duplicate string
-   - `ft_strjoin`: Concatenate two strings
-   - `ft_substr`: Extract substring
-
-3. **Header File** (`get_next_line.h`)
-   - Function prototypes
-   - Library includes
-   - Buffer size configuration
-
-### Data Flow
-
-```
-File Descriptor → read() → Buffer → Backup (static) → Extract Line → Return
-                                          ↓
-                                    Store Remainder
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- GCC or Clang compiler
-- Make (optional, for automation)
-- Standard C library
-
-### Installation
-
-1. Clone the repository:
+Compile the mandatory part:
 ```bash
-git clone https://github.com/peda-cos/get_next_line.git
-cd get_next_line
+make
 ```
 
-2. Compile the project:
-```bash
-cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c -o gnl_test
-```
-
-You can adjust `BUFFER_SIZE` to any positive value:
+Compile with a custom buffer size:
 ```bash
 cc -Wall -Wextra -Werror -D BUFFER_SIZE=1024 get_next_line.c get_next_line_utils.c
 ```
 
-### Basic Usage
+Compile the bonus part:
+```bash
+make bonus
+```
+
+### Usage
 
 ```c
 #include "get_next_line.h"
@@ -88,7 +47,7 @@ int main(void)
     int     fd;
     char    *line;
 
-    fd = open("test.txt", O_RDONLY);
+    fd = open("file.txt", O_RDONLY);
     while ((line = get_next_line(fd)) != NULL)
     {
         printf("%s", line);
@@ -99,210 +58,71 @@ int main(void)
 }
 ```
 
-## 📁 Project Structure
+### Makefile Rules
 
-```
-get_next_line/
-├── get_next_line.c          # Main function implementation
-├── get_next_line_utils.c    # Utility functions
-├── get_next_line.h          # Header file with prototypes
-├── LICENSE                  # MIT License
-├── tests/                   # Test files directory
-│   ├── simple              # Basic test case
-│   ├── empty               # Empty file test
-│   ├── empty_one           # Single newline test
-│   ├── lorem_ipsum         # Standard text test
-│   ├── many_lines          # Multiple lines test
-│   ├── multi_in_one        # Multiple FDs test
-│   ├── 63_line             # Edge case: 63 chars
-│   ├── 63_line_nl          # Edge case: 63 chars + newline
-│   ├── 64_line             # Edge case: 64 chars (BUFFER_SIZE)
-│   ├── 64_line_nl          # Edge case: 64 chars + newline
-│   ├── 65_line             # Edge case: 65 chars
-│   ├── 65_line_nl          # Edge case: 65 chars + newline
-│   ├── one_big_fat_line.txt # Very long line test
-│   ├── large_file.txt      # Large file test
-│   ├── baudelaire.txt      # Literary text
-│   └── Mr. Justice Maxell by Edgar Wallace.txt
-└── .github/
-    └── workflows/
-```
+- `make` or `make all` - Compile the mandatory part
+- `make bonus` - Compile the bonus part (multiple file descriptors)
+- `make clean` - Remove object files
+- `make fclean` - Remove object files and the library
+- `make re` - Recompile everything
 
-## ✨ Key Features
+## Resources
 
-- **Line-by-Line Reading**: Efficiently reads files one line at a time
-- **Configurable Buffer Size**: Adjustable `BUFFER_SIZE` for optimization
-- **Multiple File Descriptors**: Can handle multiple files simultaneously
-- **Memory Efficient**: Uses static variable to minimize allocations
-- **Robust Error Handling**: Handles edge cases and invalid inputs gracefully
-- **Newline Preservation**: Returns lines with their newline characters
-- **EOF Detection**: Properly detects and handles end of file
-- **No Memory Leaks**: Clean memory management with proper cleanup
+### Documentation
 
-## 💻 Development Workflow
+- [man 2 read](https://man7.org/linux/man-pages/man2/read.2.html) - System call for reading from file descriptors
+- [man 3 malloc](https://man7.org/linux/man-pages/man3/malloc.3.html) - Memory allocation
+- [Static variables in C](https://en.wikipedia.org/wiki/Static_variable) - Understanding static variables
 
-### Coding Standards
+### Articles & Tutorials
 
-The project follows strict 42 School coding standards:
+- [42 School's get_next_line guide](https://42-cursus.gitbook.io/guide/rank-01/get_next_line)
+- [File descriptors explained](https://www.computerhope.com/jargon/f/file-descriptor.htm)
 
-#### Norm Compliance
-- **File Structure**: Standard 42 header in all files
-- **Function Length**: Maximum 25 lines per function
-- **Line Length**: Maximum 80 characters per line
-- **Functions per File**: Maximum 5 functions
-- **Variable Declarations**: At the beginning of functions
-- **Indentation**: Tabs (width: 4 spaces visual)
+### AI Usage
 
-#### Naming Conventions
-- Functions: `lowercase_with_underscores`
-- Variables: Descriptive, lowercase names
-- Macros: `UPPERCASE_WITH_UNDERSCORES`
+This project was implemented without the assistance of AI code generation tools. AI was used solely for:
+- Understanding the requirements from the project subject
+- Researching best practices for static variable usage in C
+- Debugging memory leak issues during testing
 
-#### Best Practices
-- No global variables (except static when necessary)
-- Proper memory management (no leaks)
-- Comprehensive error checking
-- Clear and logical code organization
+## Algorithm
 
-### Memory Management Rules
+### Overview
 
-1. **Allocation**: Always check return value of `malloc`
-2. **Deallocation**: Free all allocated memory before returning
-3. **Error Handling**: Free allocated memory on error paths
-4. **Static Variables**: Properly manage static backup buffer
+The algorithm uses a static buffer to store leftover characters from previous reads that belong to the next line. This is necessary because `read()` may read past the current newline, and we need to preserve those characters for the next call.
 
-## 🧪 Testing
+### Step-by-Step Process
 
-### Test Coverage
+1. **Reading Phase**: 
+   - Check if the current buffer already contains a newline
+   - If not, read `BUFFER_SIZE` bytes into a temporary buffer
+   - Append the temporary buffer to the static buffer
+   - Repeat until a newline is found or EOF is reached
 
-The project includes comprehensive test files covering:
+2. **Extraction Phase**:
+   - Find the position of the newline (or EOF)
+   - Extract the line from the beginning to (and including) the newline
+   - Return the extracted line
 
-1. **Basic Functionality**
-   - Simple text files
-   - Files with multiple lines
-   - Lorem ipsum standard text
+3. **Buffer Update Phase**:
+   - Remove the extracted line from the static buffer
+   - Keep only the remaining characters (next line content)
+   - Free the old buffer and update the static pointer
 
-2. **Edge Cases**
-   - Empty files
-   - Single newline files
-   - Lines exactly at buffer boundaries (63, 64, 65 chars)
-   - Very long lines
-   - Large files
+### Static Variable Strategy
 
-3. **Special Cases**
-   - Multiple file descriptors simultaneously
-   - Literary texts (Baudelaire, Edgar Wallace)
-   - Files without trailing newlines
+- **Mandatory**: Uses a single `static char *buffer` to store leftovers between calls
+- **Bonus**: Uses a `static char *buffer[MAX_FD]` array to handle multiple file descriptors simultaneously, where each index corresponds to a specific fd
 
-### Running Tests
+### Memory Management
 
-Create a test main file:
+- The temporary read buffer is freed after each call to `read_to_buffer()`
+- The old buffer content is freed when updating to the new buffer
+- `ft_strjoin()` frees the first string argument to prevent leaks
+- Returns `NULL` on error, allowing the caller to handle cleanup
 
-```c
-#include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
+### Complexity Analysis
 
-int main(void)
-{
-    int     fd;
-    char    *line;
-    int     i = 1;
-
-    fd = open("tests/simple", O_RDONLY);
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("Line %d: %s", i++, line);
-        free(line);
-    }
-    close(fd);
-    return (0);
-}
-```
-
-Compile and run:
-```bash
-cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main.c get_next_line.c get_next_line_utils.c
-./a.out
-```
-
-### Testing Different Buffer Sizes
-
-Test with various buffer sizes to ensure robustness:
-```bash
-# Small buffer
-cc -D BUFFER_SIZE=1 get_next_line.c get_next_line_utils.c main.c
-
-# Medium buffer
-cc -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c main.c
-
-# Large buffer
-cc -D BUFFER_SIZE=10000 get_next_line.c get_next_line_utils.c main.c
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these guidelines:
-
-1. **Code Style**: Follow 42 School norm standards
-2. **Testing**: Test with multiple buffer sizes and edge cases
-3. **Memory**: Ensure no memory leaks (use valgrind)
-4. **Documentation**: Update README for significant changes
-
-### Code Exemplars
-
-When contributing, ensure your code follows these patterns:
-
-```c
-// Proper error handling with cleanup
-static char *handle_error(char *allocated_memory)
-{
-    free(allocated_memory);
-    return (NULL);
-}
-
-// Check allocation results
-buffer = malloc(size);
-if (!buffer)
-    return (handle_error(previous_allocation));
-
-// Static variable usage
-static char *backup; // Preserves state between calls
-```
-
-### Pull Request Process
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/improvement`)
-3. Commit your changes (`git commit -m 'Add improvement'`)
-4. Push to the branch (`git push origin feature/improvement`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-Copyright (c) 2025 Pedro Monteiro
-
-## 👤 Author
-
-**Pedro Monteiro (peda-cos)**
-- GitHub: [@peda-cos](https://github.com/peda-cos)
-- 42 Intra: peda-cos
-- Email: peda-cos@student.42sp.org.br
-
-## 🙏 Acknowledgments
-
-- 42 School for the project specifications
-- Fellow 42 students for testing and feedback
-- The C programming community for best practices
-
-## 📚 Resources
-
-- [42 School](https://www.42.fr/)
-- [C File I/O Documentation](https://man7.org/linux/man-pages/man2/read.2.html)
-- [Memory Management in C](https://en.cppreference.com/w/c/memory)
-
----
-
-**Note**: This project is part of the 42 School curriculum. The implementation must adhere to specific constraints and use only approved functions.
+- **Time Complexity**: O(n) where n is the total bytes read, as each byte is processed exactly once
+- **Space Complexity**: O(BUFFER_SIZE + line_length) for the temporary and static buffers
